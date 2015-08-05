@@ -7,6 +7,7 @@
 /// <reference path="../t6s-core/core-backend/t6s-core/core/scripts/infotype/Cmd.ts" />
 /// <reference path="../t6s-core/core-backend/scripts/Logger.ts" />
 /// <reference path="../t6s-core/core-backend/t6s-core/core/scripts/infotype/priorities/InfoPriority.ts" />
+/// <reference path="./sources/Subscribe.ts" />
 
 class LiveVideoNamespaceManager extends SourceNamespaceManager {
 
@@ -21,25 +22,14 @@ class LiveVideoNamespaceManager extends SourceNamespaceManager {
 	 */
 	constructor(socket : any) {
 		super(socket);
-		this.addListenerToSocket('Subscribe', this.subscribe);
+		this.addListenerToSocket('Subscribe', function (params, liveVideoNamespaceManager) { new Subscribe(params, liveVideoNamespaceManager); });
 
 		this._params = null;
 		this._cmdSession = null;
 	}
 
-	/**
-	 * Subscribe to notifications.
-	 *
-	 * @method subscribe
-	 * @param {Object} params - Params to subscribe to notifications : ???.
-	 * @param {NotifierNamespaceManager} self - the NotifierNamespaceManager's instance.
-	 */
-	subscribe(params : any, self : LiveVideoNamespaceManager = null) {
-		if(self == null) {
-			self = this;
-		}
-
-		self._params = params;
+	public setParams(params : any) {
+		this._params = params;
 	}
 
 	/**
